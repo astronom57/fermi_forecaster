@@ -19,10 +19,13 @@ def get_food_data(percent=100):
 
   import zipfile
   import os
+  import urllib.request 
+
 
   if not os.path.isfile(data_name + '.zip'): # get data if not exist
     data_url = 'https://storage.googleapis.com/ztm_tf_course/food_vision/' + data_name + '.zip'
-    !wget $data_url
+    urllib.request.urlretrieve(data_url, data_name + '.zip')
+
 
   try: 
     zip_ref = zipfile.ZipFile(data_name + '.zip')
