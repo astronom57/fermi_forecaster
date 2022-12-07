@@ -44,3 +44,23 @@ def get_food_data(percent=100):
         print(f'    in {root} there are {len(files)} images')
 
   return data_name, class_names
+
+
+def create_tb_callback(dir_name:str = 'tf_logs', exp_name:str = 'Default'):
+  """Create a tensorboard callback to use in model.fit
+  
+  Args:
+    dir_name (str): directory name for saving log files. 
+    exp_name (str): experiment name.
+   
+  Returns:
+    callback
+  """
+  import datetime
+  import tensorflow as tf
+  
+  log_dir = dir_name + '/' + exp_name + '/' + datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+  tb_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, 
+                                               )
+  print(f'Saving TF logs to {log_dir}')
+  return tb_callback
