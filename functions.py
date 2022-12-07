@@ -64,3 +64,39 @@ def create_tb_callback(dir_name:str = 'tf_logs', exp_name:str = 'Default'):
                                                )
   print(f'Saving TF logs to {log_dir}')
   return tb_callback
+
+def plot_history(history, loss_keywords=['loss'], metrics_keywords=['accuracy'],
+                 title:str=None):
+  """Plots loss and metric evolution from the training history.
+    The losses are plotted separately from the metrics. Training and validation values 
+    are plotted together in the same plot. 
+
+    Args:
+      history: history object from training
+      loss_keywords: keywords to identify losses in the history, e.g. 'loss'
+      metrics_keywords: keywords to identify metrics in the history, e.g. 'accuracy'
+    Rerurns:
+      nothing
+  """
+  import pandas as pd
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+  
+  try: 
+    df = pd.DataFrame(history.history)
+  except:
+    df = pd.DatFrame(history)
+  
+  loss_columns = df.columns[df.columns.str.contains('|'.join(loss_keywords))].values
+  metrics_columns = df.columns[df.columns.str.contains('|'.join(metrics_keywords))].values
+
+  fig, ax = plt.subplots(1,2, figsize=[20,10])
+
+  sns.lineplot(data=df[loss_columns], ax=ax[0])
+  sns.lineplot(data=df[metrics_columns], ax=ax[1])
+  ax[0].set_title('Loss')
+  ax[1].set_title('Metrics')
+  if title is not None:
+    fig.suptitle(title)
+
+  return
